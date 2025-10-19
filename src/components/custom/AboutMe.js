@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native'; // TODO: replace Text with ui/Text after export
-import { styles } from '../../styles/styles';
+import { View } from 'react-native';
+import { Text } from '../ui'; 
+// 👇 FIX: styles import karein
+import { styles } from '../../styles/styles'; 
 
 /**
  * Custom/AboutMe

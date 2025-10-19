@@ -1,24 +1,56 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text } from 'react-native'; // You may switch Text to ui/Text later
+import { View, FlatList } from 'react-native'; 
+import { Text , Button} from '../ui';
 import { styles } from '../../styles/styles';
-import { initialAzkaar } from '../../data/azkaar';
+// NOTE: initialAzkaar ab App.js mein use ho raha hai, yahan zaroorat nahi.
+// import { initialAzkaar } from '../../data/azkaar';
 
 /**
  * Custom/TasbihList
- * Renders a FlatList of azkaar with their counts.
- * NOTE: Increment/Decrement buttons are intentionally NOT implemented.
- * Students will add + and - controls using UI/Button and update state accordingly.
  */
-export default function TasbihList() {
-  const [items, setItems] = useState(initialAzkaar);
+export default function TasbihList({ items, setItems }) {
+  
+  // --- Core Logic: Immutable Update ---
+  const updateCount = (id, delta) => {
+    setItems(currentItems => {
+      return currentItems.map(item => {
+        if (item.id === id) {
+          const newCount = item.count + delta;
+          const finalCount = Math.max(0, newCount); 
+          
+          return {
+            ...item, 
+            count: finalCount,
+          };
+        }
+        return item;
+      });
+    });
+  };
 
-  // HINT ONLY (do not complete): you will need handlers like increment(id) / decrement(id)
+  const increment = (id) => updateCount(id, 1);
+  const decrement = (id) => updateCount(id, -1);
+  // ------------------------------------
 
   const renderItem = ({ item }) => (
     <View style={styles.itemRow}>
       <Text style={styles.itemName}>{item.phrase}</Text>
+      
+      <View style={styles.counterContainer}>
+        <Button 
+          style={[styles.button, styles.decrementButton]} // styles.button add kiya
+          onPress={() => decrement(item.id)} // <-- FIX: Correct function call
+        >
+          -
+        </Button>
       <Text style={styles.counter}>{item.count}</Text>
-      {/* TODO: Add increment/decrement buttons here using ui/Button */}
+      <Button 
+          style={[styles.button, styles.incrementButton]} // styles.button add kiya
+          onPress={() => increment(item.id)} // <-- FIX: Correct function call
+        >
+          +
+        </Button>
+      </View>
     </View>
   );
 
